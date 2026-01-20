@@ -10,7 +10,7 @@
 
 - Overall, this experiment enhanced my understanding of component-based UI design, React state handling, and the importance of reusable UI components in building scalable and maintainable frontend applications.
 
-Deployed Link : https://fsd-2-513b.onrender.com/
+Deployed Link : https://23bcc70030-experiment-2.netlify.app/
 
 Screenshots :
 ![Form image](image.png)
