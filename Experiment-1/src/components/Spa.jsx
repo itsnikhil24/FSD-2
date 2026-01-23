@@ -23,16 +23,21 @@ export default function SinglePageApp() {
 
 const navStyles = {
   nav: {
-    padding: "1rem",
-    backgroundColor: "#111827",
+    padding: "1rem 2rem",
+    background: "linear-gradient(90deg, #16a34a, #22c55e)",
     display: "flex",
     justifyContent: "center",
-    gap: "2rem",
+    gap: "1.5rem",
+    boxShadow: "0 4px 10px rgba(0,0,0,0.15)",
   },
   link: {
-    color: "#fff",
+    color: "#ffffff",
     textDecoration: "none",
-    fontSize: "1.1rem",
-    fontWeight: "500",
+    fontSize: "1.05rem",
+    fontWeight: "600",
+    padding: "8px 16px",
+    borderRadius: "999px",
+    transition: "all 0.3s ease",
+    backgroundColor: "rgba(255,255,255,0.15)",
   },
 };
