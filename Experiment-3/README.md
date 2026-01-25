@@ -1,16 +1,25 @@
-# React + Vite
+# Learnings from the Experiment
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- Understanding Single Page Applications (SPA)
+Learned how React Router enables Single Page Application behavior by updating the UI without reloading the browser, resulting in faster navigation and better user experience.
 
-Currently, two official plugins are available:
+- Implementation of Client-Side Routing
+Understood how BrowserRouter, Routes, and Route work together to map different URLs (Home, About, Contact Us) to their respective components in a React application.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Navigation Using Link Component
+Learned how the Link component provides smooth navigation between pages without refreshing the page, unlike traditional HTML anchor tags.
 
-## React Compiler
+- Component-Based Architecture in React
+Gained hands-on experience in building a blogging website using separate and reusable components, improving code readability and maintainability.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Version Control and Rebasing with Git
+Learned how to rebase the local branch with the remote origin branch using Git, which helps keep the commit history clean and up to date with the latest changes from the remote repository.
 
-## Expanding the ESLint configuration
+# Screenshots
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Home
+![Home](image.png)
+### About
+![About](image-1.png)
+### Contact
+![Contact](image-2.png)
