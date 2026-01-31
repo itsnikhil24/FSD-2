@@ -1,16 +1,13 @@
-# React + Vite
+# Learning Outcomes
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+After completing this experiment, the learner will be able to:
 
-Currently, two official plugins are available:
+- Understand and implement local state management in React applications using the useState hook for component-level data handling.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Differentiate between local and global state, and identify appropriate use cases for each based on data scope and reusability.
 
-## React Compiler
+- Implement global state management using Context API, enabling state sharing across multiple components without prop drilling.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Apply Redux for centralized state management, understanding actions, reducers, store, and how global state updates affect multiple components simultaneously.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Compare performance, scalability, and re-render behavior of useState, Context API, and Redux, and choose the appropriate state management approach for real-world React applications.
