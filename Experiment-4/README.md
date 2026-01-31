@@ -11,3 +11,6 @@ After completing this experiment, the learner will be able to:
 - Apply Redux for centralized state management, understanding actions, reducers, store, and how global state updates affect multiple components simultaneously.
 
 - Compare performance, scalability, and re-render behavior of useState, Context API, and Redux, and choose the appropriate state management approach for real-world React applications.
+
+# Screenshots:
+![Website Image](image.png)
