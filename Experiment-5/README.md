@@ -1,16 +1,14 @@
-# React + Vite
+# Learning Outcomes
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- Understood how React.lazy() and Suspense enable code splitting and improve application performance by loading components only when required.
 
-Currently, two official plugins are available:
+- Learned how to implement a fallback UI using Suspense to enhance user experience while lazily loaded components are being fetched.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Gained practical knowledge of linking and organizing CSS in a React (Vite) project, including global styles and component-level styling.
 
-## React Compiler
+- Understood the correct way to style the HTML body in React applications using CSS imports instead of directly linking styles in index.html.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Developed awareness of best practices in React project structure, such as separating concerns between logic, presentation, and global configuration.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+ScreenShot:
+![alt text](image.png)
