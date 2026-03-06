@@ -15,7 +15,7 @@ Implemented JSON Web Token (JWT) authentication, including generating tokens dur
 Learned how to test secured APIs using Postman, including sending headers, JSON body data, and bearer tokens for authentication.
 
 # Screenshots :
-![alt text](image1.png.png)
+![alt text](image1.png)
 
 ![alt text](image2.png)
 
