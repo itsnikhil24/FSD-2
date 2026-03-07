@@ -49,7 +49,7 @@ def basic_auth():
 
         return jsonify({"message": "Invalid Credentials"}), 401
 
-    except:
+    except Exception:
         return jsonify({"message": "Invalid Authorization Header"}), 401
 
 
@@ -96,10 +96,6 @@ def login():
             algorithm="HS256"
         )
 
-        # Ensure token is string
-        if isinstance(token, bytes):
-            token = token.decode("utf-8")
-
         return jsonify({
             "message": "Login successful",
             "token": token
@@ -112,6 +108,7 @@ def login():
 # JWT PROTECTION DECORATOR
 # ------------------------------
 def token_required(f):
+
     @wraps(f)
     def decorated(*args, **kwargs):
 
@@ -132,7 +129,7 @@ def token_required(f):
         except jwt.ExpiredSignatureError:
             return jsonify({"message": "Token expired"}), 401
 
-        except:
+        except Exception:
             return jsonify({"message": "Invalid token"}), 401
 
         return f(current_user, *args, **kwargs)
@@ -154,8 +151,8 @@ def jwt_protected(current_user):
 
 
 # ------------------------------
-# RUN SERVER
+# Local Run (for testing only)
 # ------------------------------
-if __name__ == '__main__':
+if __name__ == "__main__":
     port = int(os.environ.get("PORT", 3000))
-    app.run(debug=True, host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=port)
