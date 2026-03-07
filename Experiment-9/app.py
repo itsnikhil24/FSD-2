@@ -1,164 +1,61 @@
 from flask import Flask, request, jsonify
-import base64
-import jwt
-import datetime
-from functools import wraps
-from werkzeug.security import generate_password_hash, check_password_hash
-from config import Config
-import logging
+from flask_jwt_extended import (
+    JWTManager, create_access_token,
+    jwt_required, get_jwt_identity
+)
+import os
 
 app = Flask(__name__)
-app.config.from_object(Config)
+app.config["JWT_SECRET_KEY"] = "super-secret-key"
 
-# ------------------------------
-# Logging
-# ------------------------------
-logging.basicConfig(level=logging.INFO)
+jwt = JWTManager(app)
 
-# Dummy user database
 users = {
-    "admin": generate_password_hash("admin123")
+    "admin": {"password": "admin123", "role": "admin"},
+    "john": {"password": "john123", "role": "user"}
 }
 
-# ------------------------------
-# Home Route
-# ------------------------------
-@app.route('/')
-def home():
-    return jsonify({"message": "Authentication Server Running"})
+@app.route("/basic-protected")
+def basic_protected():
+    auth = request.authorization
+    if not auth:
+        return jsonify({"error": "Missing Basic Auth"}), 401
+
+    user = users.get(auth.username)
+
+    if user and user["password"] == auth.password:
+        return jsonify({"message": f"Welcome {auth.username}"})
+
+    return jsonify({"error": "Invalid credentials"}), 401
 
 
-# ------------------------------
-# 1️⃣ BASIC AUTH
-# ------------------------------
-@app.route('/basic-protected', methods=['GET'])
-def basic_auth():
-
-    auth_header = request.headers.get('Authorization')
-
-    if not auth_header:
-        return jsonify({"message": "Authorization header missing"}), 401
-
-    try:
-        auth_type, credentials = auth_header.split()
-
-        if auth_type != "Basic":
-            return jsonify({"message": "Invalid auth type"}), 401
-
-        decoded = base64.b64decode(credentials).decode('utf-8')
-        username, password = decoded.split(':')
-
-        if username in users and check_password_hash(users[username], password):
-            return jsonify({"message": "Basic Authentication Successful"})
-
-        return jsonify({"message": "Invalid Credentials"}), 401
-
-    except Exception as e:
-        logging.error(str(e))
-        return jsonify({"message": "Invalid Authorization Header"}), 401
-
-
-# ------------------------------
-# 2️⃣ CUSTOM HEADER AUTH
-# ------------------------------
-@app.route('/custom-protected', methods=['GET'])
-def custom_auth():
-
-    username = request.headers.get('X-Username')
-    password = request.headers.get('X-Password')
-
-    if not username or not password:
-        return jsonify({"message": "Custom headers missing"}), 401
-
-    if username in users and check_password_hash(users[username], password):
-        return jsonify({"message": "Custom Header Authentication Successful"})
-
-    return jsonify({"message": "Invalid Credentials"}), 401
-
-
-# ------------------------------
-# 3️⃣ LOGIN (GENERATE JWT)
-# ------------------------------
-@app.route('/login', methods=['POST'])
-def login():
-
-    data = request.get_json()
-
-    if not data:
-        return jsonify({"message": "Missing JSON body"}), 400
-
+@app.route("/jwt-login", methods=["POST"])
+def jwt_login():
+    data = request.json
     username = data.get("username")
     password = data.get("password")
 
-    if username in users and check_password_hash(users[username], password):
+    user = users.get(username)
 
-        payload = {
-            "user": username,
-            "exp": datetime.datetime.utcnow() + datetime.timedelta(
-                minutes=app.config["JWT_EXPIRATION_MINUTES"]
-            )
-        }
+    if user and user["password"] == password:
+        token = create_access_token(identity=username)
+        return jsonify({"access_token": token})
 
-        token = jwt.encode(
-            payload,
-            app.config['SECRET_KEY'],
-            algorithm="HS256"
-        )
-
-        return jsonify({
-            "message": "Login successful",
-            "token": token
-        })
-
-    return jsonify({"message": "Invalid credentials"}), 401
+    return jsonify({"error": "Invalid credentials"}), 401
 
 
-# ------------------------------
-# JWT PROTECTION DECORATOR
-# ------------------------------
-def token_required(f):
-
-    @wraps(f)
-    def decorated(*args, **kwargs):
-
-        auth_header = request.headers.get('Authorization')
-
-        if not auth_header:
-            return jsonify({"message": "Token missing"}), 401
-
-        try:
-            auth_type, token = auth_header.split()
-
-            if auth_type != "Bearer":
-                return jsonify({"message": "Invalid token type"}), 401
-
-            data = jwt.decode(
-                token,
-                app.config['SECRET_KEY'],
-                algorithms=["HS256"]
-            )
-
-            current_user = data["user"]
-
-        except jwt.ExpiredSignatureError:
-            return jsonify({"message": "Token expired"}), 401
-
-        except jwt.InvalidTokenError:
-            return jsonify({"message": "Invalid token"}), 401
-
-        return f(current_user, *args, **kwargs)
-
-    return decorated
+@app.route("/jwt-protected")
+@jwt_required()
+def jwt_protected():
+    current_user = get_jwt_identity()
+    return jsonify({"message": f"JWT Auth Success. Welcome {current_user}!"})
 
 
-# ------------------------------
-# JWT PROTECTED ROUTE
-# ------------------------------
-@app.route('/jwt-protected', methods=['GET'])
-@token_required
-def jwt_protected(current_user):
+@app.route("/")
+def home():
+    return jsonify({"message": "JWT Authentication Experiment Running"})
 
-    return jsonify({
-        "message": "JWT Authentication Successful",
-        "user": current_user
-    })
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
