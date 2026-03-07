@@ -19,7 +19,7 @@ users = {
 # ------------------------------
 # Home Route
 # ------------------------------
-@app.route('/')
+@app.route("/")
 def home():
     return jsonify({"message": "Authentication Server Running"})
 
@@ -27,10 +27,10 @@ def home():
 # ------------------------------
 # 1️⃣ BASIC AUTH
 # ------------------------------
-@app.route('/basic-protected', methods=['GET'])
+@app.route("/basic-protected", methods=["GET"])
 def basic_auth():
 
-    auth_header = request.headers.get('Authorization')
+    auth_header = request.headers.get("Authorization")
 
     if not auth_header:
         return jsonify({"message": "Authorization header missing"}), 401
@@ -41,8 +41,8 @@ def basic_auth():
         if auth_type != "Basic":
             return jsonify({"message": "Invalid auth type"}), 401
 
-        decoded = base64.b64decode(credentials).decode('utf-8')
-        username, password = decoded.split(':')
+        decoded = base64.b64decode(credentials).decode("utf-8")
+        username, password = decoded.split(":")
 
         if username in users and check_password_hash(users[username], password):
             return jsonify({"message": "Basic Authentication Successful"})
@@ -56,11 +56,11 @@ def basic_auth():
 # ------------------------------
 # 2️⃣ CUSTOM HEADER AUTH
 # ------------------------------
-@app.route('/custom-protected', methods=['GET'])
+@app.route("/custom-protected", methods=["GET"])
 def custom_auth():
 
-    username = request.headers.get('X-Username')
-    password = request.headers.get('X-Password')
+    username = request.headers.get("X-Username")
+    password = request.headers.get("X-Password")
 
     if not username or not password:
         return jsonify({"message": "Custom headers missing"}), 401
@@ -74,7 +74,7 @@ def custom_auth():
 # ------------------------------
 # 3️⃣ LOGIN (GENERATE JWT)
 # ------------------------------
-@app.route('/login', methods=['POST'])
+@app.route("/login", methods=["POST"])
 def login():
 
     data = request.get_json()
@@ -92,14 +92,16 @@ def login():
                 "user": username,
                 "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
             },
-            app.config['SECRET_KEY'],
-            algorithm="HS256"
+            app.config["SECRET_KEY"],
+            algorithm="HS256",
         )
 
-        return jsonify({
-            "message": "Login successful",
-            "token": token
-        })
+        return jsonify(
+            {
+                "message": "Login successful",
+                "token": token,
+            }
+        )
 
     return jsonify({"message": "Invalid credentials"}), 401
 
@@ -108,11 +110,10 @@ def login():
 # JWT PROTECTION DECORATOR
 # ------------------------------
 def token_required(f):
-
     @wraps(f)
     def decorated(*args, **kwargs):
 
-        auth_header = request.headers.get('Authorization')
+        auth_header = request.headers.get("Authorization")
 
         if not auth_header:
             return jsonify({"message": "Token missing"}), 401
@@ -123,7 +124,12 @@ def token_required(f):
             if auth_type != "Bearer":
                 return jsonify({"message": "Invalid token type"}), 401
 
-            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+            data = jwt.decode(
+                token,
+                app.config["SECRET_KEY"],
+                algorithms=["HS256"],
+            )
+
             current_user = data["user"]
 
         except jwt.ExpiredSignatureError:
@@ -140,18 +146,20 @@ def token_required(f):
 # ------------------------------
 # JWT PROTECTED ROUTE
 # ------------------------------
-@app.route('/jwt-protected', methods=['GET'])
+@app.route("/jwt-protected", methods=["GET"])
 @token_required
 def jwt_protected(current_user):
 
-    return jsonify({
-        "message": "JWT Authentication Successful",
-        "user": current_user
-    })
+    return jsonify(
+        {
+            "message": "JWT Authentication Successful",
+            "user": current_user,
+        }
+    )
 
 
 # ------------------------------
-# Local Run (for testing only)
+# RUN SERVER (LOCAL ONLY)
 # ------------------------------
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
