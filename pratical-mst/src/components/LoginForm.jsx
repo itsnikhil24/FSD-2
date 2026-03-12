@@ -8,7 +8,7 @@ function LoginForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Password validation
+  
     if (password.length < 6) {
       setError("Password must be at least 6 characters long");
       return;
@@ -16,7 +16,7 @@ function LoginForm() {
 
     setError("");
 
-    // Form submission logic
+
     console.log("Email:", email);
     console.log("Password:", password);
 
