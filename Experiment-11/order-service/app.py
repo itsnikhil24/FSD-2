@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
@@ -9,29 +10,48 @@ orders = {
     103: {"id": 103, "item": "Tablet", "status": "Pending"}
 }
 
+# Health check route
+@app.route('/')
+def home():
+    return jsonify({"message": "Order Service is running 🚀"})
+
 @app.route('/orders/<int:order_id>', methods=['GET'])
 def get_order(order_id):
-    if order_id not in orders:
+    order = orders.get(order_id)
+
+    if not order:
         return jsonify({"error": "Order not found"}), 404
-    return jsonify(orders[order_id])
+
+    return jsonify(order)
+
 
 @app.route('/orders/<int:order_id>', methods=['PUT'])
 def update_order_status(order_id):
-    if order_id not in orders:
+    order = orders.get(order_id)
+
+    if not order:
         return jsonify({"error": "Order not found"}), 404
 
-    data = request.json
+    # Validate JSON body
+    if not request.is_json:
+        return jsonify({"error": "Request must be JSON"}), 400
+
+    data = request.get_json()
     status = data.get("status")
 
-    if not status:
-        return jsonify({"error": "Status required"}), 400
+    if not status or not isinstance(status, str):
+        return jsonify({"error": "Valid status is required"}), 400
 
-    orders[order_id]["status"] = status
+    # Update order
+    order["status"] = status.strip()
 
     return jsonify({
         "message": "Order updated successfully",
-        "order": orders[order_id]
+        "order": order
     })
 
+
+# IMPORTANT: Dynamic port for deployment
 if __name__ == '__main__':
-    app.run(port=3001, debug=True)
+    port = int(os.getenv("PORT", 5001))
+    app.run(host='0.0.0.0', port=port)
