@@ -6,7 +6,7 @@
 - Developed skills in API testing and debugging using tools like Postman.
 
 # Screenshots
-![alt text](image.png)
-![alt text](image-1.png)
-![alt text](image-2.png)
+![alt text](1.png)
+![alt text](2.png)
+![alt text](3.png)
 
